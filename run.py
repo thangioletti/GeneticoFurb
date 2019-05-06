@@ -52,5 +52,12 @@ dist, cromossomos = zip(*sorted(zip(dist, cromossomos)))
 # Fatia a lista de cromossomos na metade, ficando apenas com os 10 melhores
 cromossomosFatiados = cromossomos[0:10]
 
-print(cromossomosFatiados)
-print(len(cromossomosFatiados))
+roleta = []
+count = 9;
+for i in range(10):
+    for x in (range(i+1)):
+       roleta.append(count)
+    count=count-1
+
+
+print(roleta)
