@@ -64,13 +64,10 @@ for i in range(10):
 for i in range(5):
     pai1 = cromossomosFatiados[random.choice(roleta)]
     pai2 = cromossomosFatiados[random.choice(roleta)]
-    filho1 = []
-    filho2 = []
     corte = random.randrange(0,19)
-    for i in range(20):
-        if (i < corte):
-            filho1.append(pai1[i])
-            filho2.append(pai2[i])
+    j = pai1[corte]
+    pai1[corte] = pai2[corte]
+    pai2[corte] = j
 
 
 print(roleta)
