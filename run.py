@@ -52,12 +52,25 @@ dist, cromossomos = zip(*sorted(zip(dist, cromossomos)))
 # Fatia a lista de cromossomos na metade, ficando apenas com os 10 melhores
 cromossomosFatiados = cromossomos[0:10]
 
+# Roleta
 roleta = []
 count = 9;
 for i in range(10):
     for x in (range(i+1)):
        roleta.append(count)
     count=count-1
+
+#Sorteia os pais para gerar filhos
+for i in range(5):
+    pai1 = cromossomosFatiados[random.choice(roleta)]
+    pai2 = cromossomosFatiados[random.choice(roleta)]
+    filho1 = []
+    filho2 = []
+    corte = random.randrange(0,19)
+    for i in range(20):
+        if (i < corte):
+            filho1.append(pai1[i])
+            filho2.append(pai2[i])
 
 
 print(roleta)
