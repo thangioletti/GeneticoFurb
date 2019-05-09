@@ -1,8 +1,12 @@
 import random
 import math
+import time
+
+start = time.time()
 
 qtdCromossomos = 20
 qtdGenes = 20
+ciclos = 10000
 cromossomos = []
 
 def troca(pai1, pai2, corte):
@@ -13,6 +17,7 @@ def troca(pai1, pai2, corte):
 def find_duplicate(x, corte):
     _size = len(x) 
     repeated = [] 
+    i = 0
     for i in range(_size): 
         k = i + 1
         for j in range(k, _size): 
@@ -29,6 +34,7 @@ def funcaoFitness(populacao, cx, cy):
     dcidade = [[0 for x in range(qtdGenes)] for y in range(qtdGenes)]
     
     # distancia entre as cidades
+    i = 0
     for i in range(qtdGenes):
         for j in range(qtdGenes):
             d = math.sqrt(math.pow(cx[i] - cx[j], 2) + math.pow(cy[i] - cy[j], 2))
@@ -37,6 +43,7 @@ def funcaoFitness(populacao, cx, cy):
     dist = [0 for x in range(qtdCromossomos)]
 
     # custo de cada cromossomo - a soma das distâncias para cada indivíduo
+    i = 0
     for i in range(qtdCromossomos):
         for j in range(qtdGenes):
             # soma das distancias para cada cromossomo
@@ -50,6 +57,7 @@ qtdGenes = 20
 
 # Gera 20 cromossomos (caminhos) com 20 genes (cidades) cada um, com valores entre 0 e 19
 # Matriz 20x20
+i = 0
 for i in range(qtdGenes):
     cidades = [x for x in range(0, 20)]
     random.shuffle(cidades)
@@ -60,7 +68,7 @@ for i in range(qtdGenes):
 cx = [round(random.random(), 2) for x in range(qtdGenes)]
 cy = [round(random.random(), 2) for x in range(qtdGenes)]
 
-for ciclo in range(2):
+for ciclo in range(ciclos):
     dist = funcaoFitness(cromossomos, cx, cy)
 
     # Ordena as listas de distancia e cromossomos com base nas distancias obtidas
@@ -72,21 +80,23 @@ for ciclo in range(2):
     # Roleta
     roleta = []
     count = 9
+    i = 0
     for i in range(10):
         for x in (range(i+1)):
             roleta.append(count)
         count=count-1
 
     # Sorteia os pais para gerar filhos
+    i = 0
     for i in range(5):
-        pai1 = cromossomosFatiados[random.choice(roleta)]
-        pai2 = cromossomosFatiados[random.choice(roleta)]
+        pai1 = cromossomosFatiados[random.choice(roleta)].copy()
+        pai2 = cromossomosFatiados[random.choice(roleta)].copy()
         corte = random.randrange(0,19)
         troca(pai1, pai2, corte)
 
-        while find_duplicate(pai1, corte) != -1:
-            corte = find_duplicate(pai1, corte)
+        while corte != -1:
             troca(pai1, pai2, corte)
+            corte = find_duplicate(pai1, corte)
 
         # mutação
         random1 = random.randrange(0, 19)
@@ -103,14 +113,16 @@ for ciclo in range(2):
         cromossomosFatiados.append(pai1)
         cromossomosFatiados.append(pai2)
 
-    cromossomos = cromossomosFatiados
-    print('repete')
+    cromossomos = cromossomosFatiados.copy()
     # saída final eh o custo do melhor (primeiro depois de 10.000) e o próprio cromossomo
 
 dist = funcaoFitness(cromossomos, cx, cy)
 
 # Ordena as listas de distancia e cromossomos com base nas distancias obtidas
 dist, cromossomos = zip(*sorted(zip(dist, cromossomos)))
-print(cromossomos[0])
-print(dist[0])
 
+end = time.time()
+
+print("Melhor cromossomo: " + str(cromossomos[0]))
+print("Distância: " + str(dist[0]))
+print("Tempo de execução: " + str(round(end - start, 2)) + " segundos")
