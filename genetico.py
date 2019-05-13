@@ -8,7 +8,7 @@ import math
 def gerarPopulacao(qtdCromossomos, qtdGenes):
     cromossomos = []
     for i in range(qtdCromossomos):
-        cidades = [x for x in range(1, qtdGenes)]
+        cidades = [x for x in range(1, qtdGenes+1)]
         random.shuffle(cidades)
         cromossomos.append(cidades)
     return cromossomos
@@ -17,24 +17,6 @@ def gerarPopulacao(qtdCromossomos, qtdGenes):
 # Retorna vetor de 20 posições
 def gerarVetorDePosicoes(qtdGenes):
     return [round(random.random(), 2) for x in range(qtdGenes)]
-
-# Inverte o gene selecionado (corte) entre os dois cromossomos
-def trocarGenes(cromossomo1, cromossomo2, posGene):
-    temp = cromossomo1[posGene]
-    cromossomo1[posGene] = cromossomo2[posGene]
-    cromossomo2[posGene] = temp
-
-# Com base no cromossomo informado, localiza a posição de um gene duplicado, caso houver
-# Retorna a posição do gene duplicaod se houver um ou -1 caso contrário
-def localizarGeneDuplicado(cromossomo, corte):
-    qtdGenes = len(cromossomo)
-    for i in range(qtdGenes): 
-        k = i + 1
-        for j in range(k, qtdGenes): 
-            if cromossomo[i] == cromossomo[j]: 
-                if(i != corte):
-                    return i
-    return -1
 
 # Calcula o custo de cada cromossomo utilizando os vetores vx e vy como base no calculo da distância total de cada cromossomo (custo)
 # Retorna uma lista contendo o custo de cada cromossomo
@@ -73,7 +55,26 @@ def construirRoleta(qtdCromossomos):
         count-=1
     return roleta
 
-# Faz a combinação dos dois cromossomos
+# Inverte o gene selecionado (posGene) entre os dois cromossomos
+def trocarGenes(cromossomo1, cromossomo2, posGene):
+    temp = cromossomo1[posGene]
+    cromossomo1[posGene] = cromossomo2[posGene]
+    cromossomo2[posGene] = temp
+
+# Com base no cromossomo informado, localiza a posição de um gene duplicado, caso houver
+# Retorna a posição do gene duplicaod se houver um ou -1 caso contrário
+def localizarGeneDuplicado(cromossomo, corte):
+    qtdGenes = len(cromossomo)
+    for i in range(qtdGenes): 
+        k = i + 1
+        for j in range(k, qtdGenes): 
+            if cromossomo[i] == cromossomo[j]: 
+                if(i != corte):
+                    return i
+    return -1
+
+# Faz a combinação dos dois cromossomos, recombinando seus genes até que não sobre nenhum gene repetido em um cromossomo
+# Retorna os dois cromossomos recombinados
 def recombinacao(cromossomo1, cromossomo2):
     qtdGenes = len(cromossomo1)
     corte = random.randrange(0, qtdGenes-1)
